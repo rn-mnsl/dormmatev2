@@ -33,7 +33,7 @@ public class DormmateApplication {
     }
 
     @Bean
-    CommandLineRunner run(UserRepository userRepository, UnitRepository unitRepository, TenantRepository tenantRepository, PaymentRepository paymentRepository, AnnouncementRepository announcementRepository, MaintenanceRequestRepository maintenanceRequestRepository) {
+    public CommandLineRunner run(UserRepository userRepository, UnitRepository unitRepository, TenantRepository tenantRepository, PaymentRepository paymentRepository, AnnouncementRepository announcementRepository, MaintenanceRequestRepository maintenanceRequestRepository) {
     return args -> {
         // --- Test User Entity ---
         System.out.println("----- Testing User Entity -----");

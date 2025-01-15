@@ -42,21 +42,21 @@ public class AnnouncementController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Announcement> updateAnnouncement(@PathVariable Long id, @RequestBody Announcement announcement) {
-        try {
-            Announcement updatedAnnouncement = announcementService.updateAnnouncement(id, announcement);
-            return new ResponseEntity<>(updatedAnnouncement, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+       try {
+          Announcement updatedAnnouncement = announcementService.updateAnnouncement(id, announcement);
+           return new ResponseEntity<>(updatedAnnouncement, HttpStatus.OK);
+       } catch (IllegalArgumentException e) {
+           return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+      }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteAnnouncement(@PathVariable Long id) {
-        try {
-            announcementService.deleteAnnouncement(id);
+     public ResponseEntity<HttpStatus> deleteAnnouncement(@PathVariable Long id) {
+       try {
+         announcementService.deleteAnnouncement(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+       } catch (Exception e) {
+           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+     }
 }

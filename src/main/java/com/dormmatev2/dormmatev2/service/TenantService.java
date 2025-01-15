@@ -2,7 +2,6 @@ package com.dormmatev2.dormmatev2.service;
 
 import com.dormmatev2.dormmatev2.model.Tenant;
 import com.dormmatev2.dormmatev2.model.Unit;
-import com.dormmatev2.dormmatev2.model.User;
 import com.dormmatev2.dormmatev2.repositories.TenantRepository;
 import com.dormmatev2.dormmatev2.repositories.UnitRepository;
 import com.dormmatev2.dormmatev2.repositories.UserRepository;
@@ -17,30 +16,20 @@ public class TenantService {
 
     @Autowired
     private TenantRepository tenantRepository;
-
+    @Autowired
+    private UnitRepository unitRepository;
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UnitRepository unitRepository;
 
-    public Tenant saveTenant(Tenant tenant, Long userId, Long unitId) {
-        // Check if the user already has a tenant profile
-        if (tenantRepository.findByUser_Username(tenant.getUser().getUsername()).isPresent()) {
-            throw new IllegalArgumentException("User already has a tenant profile");
-        }
-
-        // Fetch the User entity
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
-        tenant.setUser(user);
-
+    public Tenant saveTenant(Tenant tenant,  Long unitId) {
         // Fetch the Unit entity
-        Unit unit = unitRepository.findById(unitId)
-                .orElseThrow(() -> new IllegalArgumentException("Unit not found with id: " + unitId));
-        tenant.setUnit(unit);
-
-        return tenantRepository.save(tenant);
+         Unit unit = unitRepository.findById(unitId)
+                 .orElseThrow(() -> new IllegalArgumentException("Unit not found with id: " + unitId));
+         tenant.setUnit(unit);
+ 
+         return tenantRepository.save(tenant);
+     
     }
     public List<Tenant> findAllTenants() {
         return tenantRepository.findAll();
@@ -76,9 +65,9 @@ public class TenantService {
 
         return tenantRepository.save(existingTenant);
     }
-    public Optional<Tenant> findTenantByUsername(String username) {
+      public Optional<Tenant> findTenantByUsername(String username) {
         return tenantRepository.findByUser_Username(username);
     }
-
+    
     // Add other methods as needed for your application
 }

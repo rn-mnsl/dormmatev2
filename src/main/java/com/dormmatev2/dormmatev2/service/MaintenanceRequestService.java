@@ -2,10 +2,10 @@ package com.dormmatev2.dormmatev2.service;
 
 import com.dormmatev2.dormmatev2.model.MaintenanceRequest;
 import com.dormmatev2.dormmatev2.model.Tenant;
-import com.dormmatev2.dormmatev2.model.Unit;
+// import com.dormmatev2.dormmatev2.model.Unit;
 import com.dormmatev2.dormmatev2.repositories.MaintenanceRequestRepository;
 import com.dormmatev2.dormmatev2.repositories.TenantRepository;
-import com.dormmatev2.dormmatev2.repositories.UnitRepository;
+// import com.dormmatev2.dormmatev2.repositories.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +21,6 @@ public class MaintenanceRequestService {
     @Autowired
     private TenantRepository tenantRepository; // For associating requests with tenants
 
-    @Autowired
-    private UnitRepository unitRepository; // For associating requests with units
 
     public MaintenanceRequest saveMaintenanceRequest(MaintenanceRequest maintenanceRequest, Long tenantId, Long unitId) {
         // Fetch the associated Tenant
@@ -49,6 +47,7 @@ public class MaintenanceRequestService {
     public void deleteMaintenanceRequest(Long id) {
         maintenanceRequestRepository.deleteById(id);
     }
+
 
     public MaintenanceRequest updateMaintenanceRequest(Long id, MaintenanceRequest requestDetails) {
         MaintenanceRequest existingRequest = maintenanceRequestRepository.findById(id)

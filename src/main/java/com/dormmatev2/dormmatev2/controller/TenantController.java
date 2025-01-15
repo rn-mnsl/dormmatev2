@@ -18,9 +18,9 @@ public class TenantController {
     private TenantService tenantService;
 
     @PostMapping
-    public ResponseEntity<Tenant> createTenant(@RequestBody Tenant tenant, @RequestParam Long userId, @RequestParam Long unitId) {
+    public ResponseEntity<Tenant> createTenant(@RequestBody Tenant tenant, @RequestParam Long unitId) {
         try {
-            Tenant savedTenant = tenantService.saveTenant(tenant, userId, unitId);
+            Tenant savedTenant = tenantService.saveTenant(tenant, unitId);
             return new ResponseEntity<>(savedTenant, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
