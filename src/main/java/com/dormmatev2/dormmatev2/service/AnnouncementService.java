@@ -15,32 +15,31 @@ public class AnnouncementService {
 
     @Autowired
     private AnnouncementRepository announcementRepository;
-
+    
     @Autowired
-    private UserRepository userRepository; // Link to the User who posted it
+      private UserRepository userRepository;
 
     public Announcement saveAnnouncement(Announcement announcement, Long userId) {
-        // Fetch the User who is posting the announcement
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
-        announcement.setPostedBy(user); // Set the 'postedBy' property using the retrieved user
+         // Fetch the User who is posting the announcement
+         User user = userRepository.findById(userId)
+                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+           announcement.setPostedBy(user); // Link to the User who posted it
 
-        return announcementRepository.save(announcement);
+         return announcementRepository.save(announcement);
     }
-    
+
     public List<Announcement> findAllAnnouncements() {
-        return announcementRepository.findAll();
+       return announcementRepository.findAll();
     }
-    
-   public Optional<Announcement> findAnnouncementById(Long id) {
+
+    public Optional<Announcement> findAnnouncementById(Long id) {
         return announcementRepository.findById(id);
     }
-    
-   public void deleteAnnouncement(Long id) {
+
+    public void deleteAnnouncement(Long id) {
         announcementRepository.deleteById(id);
     }
-    
-    public Announcement updateAnnouncement(Long id, Announcement announcementDetails) {
+  public Announcement updateAnnouncement(Long id, Announcement announcementDetails) {
         Announcement existingAnnouncement = announcementRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Announcement not found with id: " + id));
             
@@ -51,8 +50,7 @@ public class AnnouncementService {
        if (announcementDetails.getContent() != null && !announcementDetails.getContent().isEmpty()) {
           existingAnnouncement.setContent(announcementDetails.getContent());
          }
-
-      return announcementRepository.save(existingAnnouncement);
+         
+        return announcementRepository.save(existingAnnouncement);
     }
-
 }

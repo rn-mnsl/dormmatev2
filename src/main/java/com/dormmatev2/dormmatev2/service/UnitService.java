@@ -1,12 +1,13 @@
 package com.dormmatev2.dormmatev2.service;
 
-import com.dormmatev2.dormmatev2.model.Unit;
-import com.dormmatev2.dormmatev2.repositories.UnitRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.dormmatev2.dormmatev2.model.Unit;
+import com.dormmatev2.dormmatev2.repositories.UnitRepository;
 
 @Service
 public class UnitService {
@@ -14,7 +15,7 @@ public class UnitService {
     @Autowired
     private UnitRepository unitRepository;
 
-    public Unit saveUnit(Unit unit) {
+     public Unit saveUnit(Unit unit) {
         return unitRepository.save(unit);
     }
 
@@ -27,9 +28,9 @@ public class UnitService {
     }
 
     public void deleteUnit(Long id) {
-        unitRepository.deleteById(id);
+       unitRepository.deleteById(id);
     }
-    public Unit updateUnit(Long id, Unit unitDetails) {
+      public Unit updateUnit(Long id, Unit unitDetails) {
         Unit existingUnit = unitRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Unit not found with id: " + id));
 
@@ -44,6 +45,5 @@ public class UnitService {
 
         return unitRepository.save(existingUnit);
     }
-
     // Add other methods as needed for your application
 }

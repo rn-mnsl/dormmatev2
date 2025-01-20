@@ -1,17 +1,21 @@
 package com.dormmatev2.dormmatev2.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+
 @Entity
+@Table(name = "maintenance_requests")
 public class MaintenanceRequest {
 
     @Id
@@ -20,13 +24,13 @@ public class MaintenanceRequest {
 
     @ManyToOne
     @JoinColumn(name = "tenant_id")
-    @JsonIgnoreProperties({"payments", "maintenanceRequests"})
-    private Tenant tenant;
+    @JsonIgnoreProperties({"payments", "maintenanceRequests", "unit"})
+    private User tenant;
 
-    // @ManyToOne
-    // @JoinColumn(name = "unit_id")
-    // @JsonIgnoreProperties({"tenants", "maintenanceRequests"})
-    // private Unit unit;
+    @ManyToOne
+    @JoinColumn(name = "unit_id")
+    @JsonIgnoreProperties({"tenants", "maintenanceRequests"})
+    private Unit unit;
 
     @Column(nullable = false)
     private String description;
@@ -37,9 +41,10 @@ public class MaintenanceRequest {
     @Column(nullable = false)
     private String status; // "open", "in progress", "resolved"
 
-    @Column(nullable = false) 
-    private String unit; // enter the unit here 
-    // Getters and setters
+    @Column
+    private String proofOfDamage;
+
+   // Getters and setters
 
     public Long getRequestId() {
         return requestId;
@@ -49,21 +54,21 @@ public class MaintenanceRequest {
         this.requestId = requestId;
     }
 
-    public Tenant getTenant() {
+    public User getTenant() {
         return tenant;
     }
 
-    public void setTenant(Tenant tenant) {
+    public void setTenant(User tenant) {
         this.tenant = tenant;
     }
 
-    // public Unit getUnit() {
-    //     return unit;
-    // }
+    public Unit getUnit() {
+        return unit;
+    }
 
-    // public void setUnit(Unit unit) {
-    //     this.unit = unit;
-    // }
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
 
     public String getDescription() {
         return description;
@@ -89,11 +94,11 @@ public class MaintenanceRequest {
         this.status = status;
     }
 
-    public void setUnit(String unit){
-        this.unit = unit; 
+    public String getProofOfDamage() {
+        return proofOfDamage;
     }
 
-    public String getUnit(){
-        return unit;
+    public void setProofOfDamage(String proofOfDamage) {
+        this.proofOfDamage = proofOfDamage;
     }
 }

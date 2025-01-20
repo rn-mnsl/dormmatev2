@@ -1,13 +1,14 @@
 package com.dormmatev2.dormmatev2.service;
 
-import com.dormmatev2.dormmatev2.model.User;
-import com.dormmatev2.dormmatev2.repositories.UserRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.dormmatev2.dormmatev2.model.User;
+import com.dormmatev2.dormmatev2.repositories.UserRepository;
 
 @Service
 public class UserService {
@@ -30,26 +31,26 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User findUserByUsername(String username) {
+     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+    public Optional<User> findUserById(Long id) {
+          return userRepository.findById(id);
+      }
 
-    public List<User> findAllUsers() {
+   public List<User> findAllUsers() {
         return userRepository.findAll();
     }
-
-    public Optional<User> findUserById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    public void deleteUser(Long id) {
+      public void deleteUser(Long id) {
         userRepository.deleteById(id);
-    }
-    public User updateUser(Long id, User userDetails) {
+     }
+
+
+     public User updateUser(Long id, User userDetails) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
 
@@ -69,24 +70,39 @@ public class UserService {
         }
 
         // Only update password if a new one is provided
-        if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+         if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
             existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
-        }
+       }
+
 
         if (userDetails.getRole() != null && !userDetails.getRole().isEmpty()) {
             existingUser.setRole(userDetails.getRole());
         }
+        
+         if (userDetails.getName() != null && !userDetails.getName().isEmpty()) {
+             existingUser.setName(userDetails.getName());
+        }
+         if (userDetails.getContactNumber() != null && !userDetails.getContactNumber().isEmpty()) {
+              existingUser.setContactNumber(userDetails.getContactNumber());
+         }
 
-        return userRepository.save(existingUser);
+       if (userDetails.getMoveInDate() != null ) {
+             existingUser.setMoveInDate(userDetails.getMoveInDate());
+        }
+        if (userDetails.getUnit() != null) {
+              existingUser.setUnit(userDetails.getUnit());
+        }
+
+       return userRepository.save(existingUser);
     }
 
-    public boolean existsByUsername(String username) {
+
+  public boolean existsByUsername(String username) {
         return userRepository.findByUsername(username) != null;
     }
 
-    public boolean existsByEmail(String email) {
-        return userRepository.findByEmail(email) != null;
-    }
-
-    // Add other methods as needed for your application
+  public boolean existsByEmail(String email) {
+    return userRepository.findByEmail(email) != null;
+  }
+    
 }

@@ -19,9 +19,9 @@ public class UnitController {
 
     @PostMapping
     public ResponseEntity<Unit> createUnit(@RequestBody Unit unit) {
-        Unit savedUnit = unitService.saveUnit(unit);
+         Unit savedUnit = unitService.saveUnit(unit);
         return new ResponseEntity<>(savedUnit, HttpStatus.CREATED);
-    }
+   }
 
     @GetMapping
     public ResponseEntity<List<Unit>> getAllUnits() {
@@ -33,26 +33,26 @@ public class UnitController {
     public ResponseEntity<Unit> getUnitById(@PathVariable Long id) {
         Optional<Unit> unit = unitService.findUnitById(id);
         return unit.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+              .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Unit> updateUnit(@PathVariable Long id, @RequestBody Unit unit) {
-        try {
-            Unit updatedUnit = unitService.updateUnit(id, unit);
+     @PutMapping("/{id}")
+     public ResponseEntity<Unit> updateUnit(@PathVariable Long id, @RequestBody Unit unit) {
+         try {
+          Unit updatedUnit = unitService.updateUnit(id, unit);
             return new ResponseEntity<>(updatedUnit, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-    }
+       }
+     }
+
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteUnit(@PathVariable Long id) {
+   public ResponseEntity<HttpStatus> deleteUnit(@PathVariable Long id) {
         try {
             unitService.deleteUnit(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+          return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+       } catch (Exception e) {
+         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+       }
     }
 }

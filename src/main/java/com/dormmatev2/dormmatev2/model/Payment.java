@@ -1,18 +1,22 @@
 package com.dormmatev2.dormmatev2.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@Table(name = "payments")
 public class Payment {
 
     @Id
@@ -21,8 +25,8 @@ public class Payment {
 
     @ManyToOne
     @JoinColumn(name = "tenant_id")
-    @JsonIgnoreProperties({"payments", "maintenanceRequests"})
-    private Tenant tenant;
+    @JsonIgnoreProperties({"payments", "maintenanceRequests","unit"})
+    private User tenant;
 
     @Column(nullable = false)
     private BigDecimal amount;
@@ -32,6 +36,12 @@ public class Payment {
 
     @Column(nullable = false)
     private LocalDate dueDate;
+      
+      @Column (nullable = false)
+    private int month;
+
+      @Column (nullable = false)
+    private int year;
 
     @Column(nullable = false)
     private String status; // "pending", "paid", "overdue"
@@ -39,9 +49,9 @@ public class Payment {
     @Column
     private String proofOfPayment; // Consider storing file paths or URLs
 
-    // Getters and setters
+    // Getters and setters...
 
-    public Long getPaymentId() {
+     public Long getPaymentId() {
         return paymentId;
     }
 
@@ -49,11 +59,11 @@ public class Payment {
         this.paymentId = paymentId;
     }
 
-    public Tenant getTenant() {
+    public User getTenant() {
         return tenant;
     }
 
-    public void setTenant(Tenant tenant) {
+    public void setTenant(User tenant) {
         this.tenant = tenant;
     }
 
@@ -95,5 +105,21 @@ public class Payment {
 
     public void setProofOfPayment(String proofOfPayment) {
         this.proofOfPayment = proofOfPayment;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 }
