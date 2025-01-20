@@ -21,7 +21,6 @@ public class MaintenanceRequestService {
     @Autowired
     private TenantRepository tenantRepository; // For associating requests with tenants
 
-
     public MaintenanceRequest saveMaintenanceRequest(MaintenanceRequest maintenanceRequest, Long tenantId, Long unitId) {
         // Fetch the associated Tenant
         Tenant tenant = tenantRepository.findById(tenantId)
