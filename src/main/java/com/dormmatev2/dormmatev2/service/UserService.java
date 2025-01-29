@@ -113,4 +113,13 @@ public class UserService {
    public boolean existsByEmail(String email) {
        return userRepository.findByEmail(email) != null;
     }
+
+    public User authenticate(String username, String password) {
+        // In a real application, you should hash the password before comparing
+        User user = userRepository.findByUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+        return null;
+    }
 }
