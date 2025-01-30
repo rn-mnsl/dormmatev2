@@ -29,7 +29,7 @@ public class Payment {
     private User tenant;
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private Double amount;
 
     @Column
     private LocalDate paymentDate;
@@ -37,16 +37,16 @@ public class Payment {
     @Column(nullable = false)
     private LocalDate dueDate;
       
-      @Column (nullable = false)
+    @Column (nullable = false)
     private int month;
 
-      @Column (nullable = false)
+    @Column (nullable = false)
     private int year;
 
     @Column(nullable = false)
     private String status; // "pending", "paid", "overdue"
 
-    @Column
+    @Column(length = 1000)
     private String proofOfPayment; // Consider storing file paths or URLs
 
     // Getters and setters...
@@ -67,11 +67,11 @@ public class Payment {
         this.tenant = tenant;
     }
 
-    public BigDecimal getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

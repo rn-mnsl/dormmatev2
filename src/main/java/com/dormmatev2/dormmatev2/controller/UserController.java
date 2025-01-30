@@ -28,6 +28,11 @@ public class UserController {
             response.put("userId", user.getUserId());
             response.put("username", user.getUsername());
             response.put("role", user.getRole());
+
+            // Check if the user has a unit and add unitId to the response if available
+            if (user.getUnit() != null) {
+                response.put("unitId", user.getUnit().getUnitId());
+            }
             return ResponseEntity.ok(response);
         }
         

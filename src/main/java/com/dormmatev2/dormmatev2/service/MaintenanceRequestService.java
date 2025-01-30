@@ -6,14 +6,27 @@ import com.dormmatev2.dormmatev2.model.User;
 import com.dormmatev2.dormmatev2.repositories.MaintenanceRequestRepository;
 import com.dormmatev2.dormmatev2.repositories.UnitRepository;
 import com.dormmatev2.dormmatev2.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class MaintenanceRequestService {
+
+    @Value("${upload.path}") // Configure this in application.properties
+    String uploadPath;
 
     @Autowired
     private MaintenanceRequestRepository maintenanceRequestRepository;
@@ -70,4 +83,51 @@ public class MaintenanceRequestService {
     public List<MaintenanceRequest> findMaintenanceRequestsByTenantId(Long tenantId) {
       return maintenanceRequestRepository.findByTenant_UserId(tenantId);
     }
+
+    public MaintenanceRequest createMaintenanceRequest(MultipartFile file, Long tenantId, Long unitId, 
+        String description, String requestDate) throws Exception {
+
+    // Create uploads directory if it doesn't exist
+    Path uploadDir = Paths.get(uploadPath).toAbsolutePath().normalize();
+    if (!Files.exists(uploadDir)) {
+        Files.createDirectories(uploadDir);
+    }
+
+    // Generate unique filename
+    String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+    Path filePath = uploadDir.resolve(filename);
+
+    // Save file to the upload directory
+    Files.copy(file.getInputStream(), filePath);
+
+    // Create maintenance request record
+    MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
+    
+    // Fetch and validate tenant
+    User tenant = userRepository.findById(tenantId)
+        .orElseThrow(() -> new Exception("Tenant not found"));
+    
+    // Fetch and validate unit
+    Unit unit = unitRepository.findById(unitId)
+        .orElseThrow(() -> new Exception("Unit not found"));
+
+    maintenanceRequest.setTenant(tenant);
+    maintenanceRequest.setUnit(unit);
+    maintenanceRequest.setDescription(description);
+
+    // Parse the date string
+    DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    LocalDateTime parsedDate = LocalDateTime.parse(requestDate, formatter);
+    maintenanceRequest.setRequestDate(parsedDate);
+
+    
+    // Store the full URL for the uploaded image
+    String fileUrl = "http://localhost:8080/files/" + filename;
+    maintenanceRequest.setProofOfDamage(fileUrl);
+
+    // Set initial status as PENDING
+    maintenanceRequest.setStatus("PENDING");
+
+    return maintenanceRequestRepository.save(maintenanceRequest);
+}
 }

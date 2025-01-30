@@ -39,9 +39,9 @@ public class MaintenanceRequest {
     private LocalDateTime requestDate = LocalDateTime.now();
 
     @Column(nullable = false)
-    private String status; // "open", "in progress", "resolved"
+    private String status = "open"; // "open", "in progress", "resolved"
 
-    @Column
+    @Column(length = 1000)
     private String proofOfDamage;
 
    // Getters and setters

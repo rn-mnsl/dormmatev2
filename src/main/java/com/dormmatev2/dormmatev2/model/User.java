@@ -45,7 +45,7 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "unit_id")
-        @JsonIgnoreProperties("tenants")
+    @JsonIgnoreProperties("tenants")
     private Unit unit;
 
 
