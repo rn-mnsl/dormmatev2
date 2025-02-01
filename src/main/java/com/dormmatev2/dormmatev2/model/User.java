@@ -1,5 +1,7 @@
 package com.dormmatev2.dormmatev2.model;
 
+// Add all here the necessary imports 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,32 +16,52 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Table;
 
+/*
+    This represents the users within the dormitory system. 
+
+    Each user is associated with one unit and a unit can have multiple tenants.  
+
+    One user can have multiple payments. 
+
+    One user can also have multiple maintenance requests. 
+
+    This demonstrates encapsulation as we are creating private variables and declarting setters and getters to acces these variables. 
+*/
+
 @Entity
 @Table(name="users")
 public class User {
 
+    // This creates a auto-generated unique ID for the userID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    // required username and must be unique 
     @Column(unique = true, nullable = false)
     private String username;
 
+    // required password 
     @Column(nullable = false)
-    private String password; // Remember to hash passwords!
+    private String password; // hashed passwords 
 
+    // required email and must be unique 
     @Column(unique = true, nullable = false)
     private String email;
 
+    // required role either admin / tenant 
     @Column(nullable = false)
     private String role; // "admin" or "tenant"
 
+    // created name attribute
     @Column
     private String name;
 
+    // created name attribute
     @Column
     private String contactNumber;
 
+    // created name attribute
     @Column
     private LocalDate moveInDate;
 

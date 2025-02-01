@@ -1,10 +1,9 @@
 package com.dormmatev2.dormmatev2.model;
 
-import java.math.BigDecimal;
+// add here all the necessary imports 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+// manages relational data in java applications and persist data between object and database 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,27 +12,39 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
+// used to prevent circular reference in generating JSON 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/*
+    This is a model for the payments within the dormitory system. 
+    Each payment is associated to one tenant, and a tenant can have multiple payments. 
+    This demonstrates encapsulation as we are creating private variables and declarting setters and getters to acces these variables. 
+*/
 @Entity
 @Table(name = "payments")
 public class Payment {
 
+    // creates auto-generated paymentID to prevent repeating of primary key 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
 
+    // many-to-one relationship of the payments to the tenants 
     @ManyToOne
-    @JoinColumn(name = "tenant_id")
+    @JoinColumn(name = "tenant_id") // this is to join the column of tenant and payments
     @JsonIgnoreProperties({"payments", "maintenanceRequests","unit"})
     private User tenant;
 
+    // required amount paid
     @Column(nullable = false)
     private Double amount;
 
+    // optional payment date 
     @Column
     private LocalDate paymentDate;
 
+    // required due date 
     @Column(nullable = false)
     private LocalDate dueDate;
       
@@ -43,13 +54,15 @@ public class Payment {
     @Column (nullable = false)
     private int year;
 
+    // required status of the payment 
     @Column(nullable = false)
     private String status; // "pending", "paid", "overdue"
 
+    // store the URL of the proof of payment 
     @Column(length = 1000)
     private String proofOfPayment; // Consider storing file paths or URLs
 
-    // Getters and setters...
+    // Getters and setters for  all the attributes 
 
      public Long getPaymentId() {
         return paymentId;

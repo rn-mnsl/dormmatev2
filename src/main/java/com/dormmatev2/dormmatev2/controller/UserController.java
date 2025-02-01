@@ -19,6 +19,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Handles user login by authenticating username and password.
+     * Returns user details if authentication is successful.
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         User user = userService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
@@ -39,65 +43,87 @@ public class UserController {
         return ResponseEntity.badRequest().body("Invalid credentials");
     }
 
-       @PostMapping
+    /**
+     * Creates a new user with an optional unit association.
+     */
+    @PostMapping
     public ResponseEntity<User> createUser(@RequestParam(required=false) Long unitId, @RequestBody User user) {
         try {
-             User savedUser = userService.saveUser(user, unitId);
-              return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-       } catch (IllegalArgumentException e) {
+            User savedUser = userService.saveUser(user, unitId);
+            return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-     }
+    }
 
-      @GetMapping
-     public ResponseEntity<List<User>> getAllUsers() {
-          List<User> users = userService.findAllUsers();
-          return new ResponseEntity<>(users, HttpStatus.OK);
-       }
+    /**
+     * Retrieves all users from the database.
+     */
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.findAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 
-      @GetMapping("/{id}")
+    /**
+     * Retrieves a user by their ID.
+     */
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-          Optional<User> user = userService.findUserById(id);
+        Optional<User> user = userService.findUserById(id);
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-      }
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
-   @GetMapping("/byUsername/{username}")
+    /**
+     * Retrieves a user by their username.
+     */
+    @GetMapping("/byUsername/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
-          User user = userService.findUserByUsername(username);
-         if (user != null) {
-              return new ResponseEntity<>(user, HttpStatus.OK);
-          } else {
-              return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-           }
-      }
-
-    @GetMapping("/byEmail/{email}")
-     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
-          User user = userService.findUserByEmail(email);
-          if (user != null) {
+        User user = userService.findUserByUsername(username);
+        if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
-           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-       }
-  }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
-        @PutMapping("/{id}")
+    /**
+     * Retrieves a user by their email.
+     */
+    @GetMapping("/byEmail/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        User user = userService.findUserByEmail(email);
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * Updates an existing user's details.
+     */
+    @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-         try {
-           User updatedUser = userService.updateUser(id, user);
+        try {
+            User updatedUser = userService.updateUser(id, user);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-       }
-     }
-      @DeleteMapping("/{id}")
-       public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * Deletes a user by their ID.
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
         try {
-             userService.deleteUser(id);
-             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-          } catch (Exception e) {
+            userService.deleteUser(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-          }
-       }
+        }
+    }
 }

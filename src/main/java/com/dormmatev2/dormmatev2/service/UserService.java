@@ -1,5 +1,7 @@
 package com.dormmatev2.dormmatev2.service;
 
+// Import necessary classes and interface
+
 import java.util.List;
 import java.util.Optional;
 
@@ -12,58 +14,75 @@ import com.dormmatev2.dormmatev2.model.User;
 import com.dormmatev2.dormmatev2.repositories.UnitRepository;
 import com.dormmatev2.dormmatev2.repositories.UserRepository;
 
-
+// This indicates that this is a service 
 @Service
 public class UserService {
 
+    // this injects the User Repository to this class. 
     @Autowired
     private UserRepository userRepository;
     
+    // this injects the Unit Repository to this class. 
     @Autowired
     private UnitRepository unitRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
+        // method to save the new user into the database 
        public User saveUser(User user, Long unitId) {
+
+        // get and check if the username already exists 
           if (userRepository.findByUsername(user.getUsername()) != null) {
                 throw new IllegalArgumentException("Username already exists");
             }
+
+        // get and check if the email already exists
         if (userRepository.findByEmail(user.getEmail()) != null) {
                 throw new IllegalArgumentException("Email already exists");
             }
-
+        // if unit is not found 
           if(unitId != null) {
             Unit unit = unitRepository.findById(unitId)
                     .orElseThrow(() -> new IllegalArgumentException("Unit not found with id: " + unitId));
                 user.setUnit(unit);
            }
-            
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+           // save the user into the database 
         return userRepository.save(user);
     }
     
-
+    // method to find the username of the tenant 
     public User findUserByUsername(String username) {
+
+        // fetch the user and then display it. 
       return userRepository.findByUsername(username);
      }
 
+     // method to find the user by the email 
     public User findUserByEmail(String email) {
+
+        // fetch the user and then display it. 
           return userRepository.findByEmail(email);
     }
     
+    // method to find the user by the ID 
      public Optional<User> findUserById(Long id) {
+
+        // fetch the user and then display it. 
          return userRepository.findById(id);
      }
 
+     // method to find all the users in the database 
      public List<User> findAllUsers() {
+
+        // fetch and return all of the users in the database 
         return userRepository.findAll();
       }
 
+    // method to delete a user in the database 
       public void deleteUser(Long id) {
        userRepository.deleteById(id);
       }
 
+      // method to update an exisiting user in the database. 
    public User updateUser(Long id, User userDetails) {
      User existingUser = userRepository.findById(id)
               .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
@@ -84,7 +103,7 @@ public class UserService {
 
         // Only update password if a new one is provided
         if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-            existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            existingUser.setPassword(userDetails.getPassword());
         }
 
         if (userDetails.getRole() != null && !userDetails.getRole().isEmpty()) {
@@ -106,6 +125,7 @@ public class UserService {
         }
       return userRepository.save(existingUser);
     }
+
    public boolean existsByUsername(String username) {
        return userRepository.findByUsername(username) != null;
     }
@@ -115,7 +135,6 @@ public class UserService {
     }
 
     public User authenticate(String username, String password) {
-        // In a real application, you should hash the password before comparing
         User user = userRepository.findByUsername(username);
         if (user != null && user.getPassword().equals(password)) {
             return user;
