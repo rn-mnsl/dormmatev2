@@ -1,15 +1,16 @@
 package com.dormmatev2.dormmatev2.service;
 
 // Import necessary classes and interface
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.dormmatev2.dormmatev2.model.Announcement;
 import com.dormmatev2.dormmatev2.model.User;
 import com.dormmatev2.dormmatev2.repositories.AnnouncementRepository;
 import com.dormmatev2.dormmatev2.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 // This indicates that this is a service 
 @Service
@@ -23,7 +24,7 @@ public class AnnouncementService {
     // this injects the UserRepository to this class. 
     // allows to use the user details when creating or updating announcements. 
     @Autowired
-      private UserRepository userRepository;
+    private UserRepository userRepository;
 
       // method to save a new announcement and associate it to a user. 
     public Announcement saveAnnouncement(Announcement announcement, Long userId) {

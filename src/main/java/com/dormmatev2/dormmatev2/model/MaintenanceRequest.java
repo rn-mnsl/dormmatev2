@@ -3,10 +3,8 @@ package com.dormmatev2.dormmatev2.model;
 // add here all the necessary imports 
 import java.time.LocalDateTime;
 
-// used to prevent circular reference in generating JSON 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-// manages relational data in java applications and persist data between object and database 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

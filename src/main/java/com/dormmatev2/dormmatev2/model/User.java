@@ -2,18 +2,20 @@ package com.dormmatev2.dormmatev2.model;
 
 // Add all here the necessary imports 
 
+import java.time.LocalDate;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDate;
-import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 /*
@@ -125,7 +127,10 @@ public class User {
     }
 
     public String getName() {
-        return name;
+        if (role.equals("admin")){
+            return "Admin: " + name; 
+        }
+            return name;
     }
 
     public void setName(String name) {

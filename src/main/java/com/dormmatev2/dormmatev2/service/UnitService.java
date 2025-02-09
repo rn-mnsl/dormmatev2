@@ -27,24 +27,19 @@ public class UnitService {
         return unitRepository.save(unit);
     }
 
-    // method to find all units in the database. 
+ 
     public List<Unit> findAllUnits() {
 
-        // returns all the units to be displayed in the frontend. 
         return unitRepository.findAll();
     }
 
-    // method to find the unit by using the unitID 
     public Optional<Unit> findUnitById(Long id) {
 
-        // this is optional because it may not exist. 
         return unitRepository.findById(id);
     }
 
-    // method to delete the unit in the database. 
     public void deleteUnit(Long id) {
 
-    // remove the unit from the database 
        unitRepository.deleteById(id);
     }
 
